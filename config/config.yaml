@@ -1,0 +1,63 @@
+# Application Configuration
+
+app:
+  name: "AI Document Classifier"
+  version: "1.0.0"
+  log_level: "INFO"
+
+# Document Processing Settings
+document_processing:
+  max_file_size_mb: 50
+  supported_formats:
+    - "pdf"
+    - "png"
+    - "jpg"
+    - "jpeg"
+  enable_ocr: true
+  ocr_language: "eng"
+
+# Classification Settings
+classification:
+  categories:
+    - "Public"
+    - "Confidential"
+    - "Highly Sensitive"
+    - "Unsafe"
+  min_confidence_threshold: 0.5
+  enable_dual_verification: false
+
+# PII Detection Settings
+pii_detection:
+  enable_regex: true
+  enable_ner: true
+  patterns:
+    ssn: true
+    credit_card: true
+    phone: true
+    email: true
+    bank_account: true
+
+# Gemini API Settings
+gemini:
+  model: "gemini-1.5-flash"
+  temperature: 0.3
+  max_tokens: 2048
+  safety_settings:
+    harassment: "BLOCK_MEDIUM_AND_ABOVE"
+    hate_speech: "BLOCK_MEDIUM_AND_ABOVE"
+    sexually_explicit: "BLOCK_MEDIUM_AND_ABOVE"
+    dangerous_content: "BLOCK_MEDIUM_AND_ABOVE"
+
+# Output Settings
+output:
+  format: "json"
+  include_images: false
+  include_full_text: false
+
+# Paths
+paths:
+  input_dir: "./data/input"
+  output_dir: "./data/output"
+  feedback_dir: "./data/feedback"
+  logs_dir: "./logs"
+
