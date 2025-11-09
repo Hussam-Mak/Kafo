@@ -13,7 +13,6 @@ import pdfplumber
 from pdf2image import convert_from_path
 from PIL import Image
 import pytesseract
-import easyocr
 
 from src.config_loader import config
 from src.logger import logger
@@ -68,12 +67,18 @@ class DocumentProcessor:
         self.max_file_size_mb = config.get('document_processing.max_file_size_mb', 50)
         self.supported_formats = config.get('document_processing.supported_formats', ['pdf'])
         
-        # Initialize OCR readers
+        # Initialize OCR readers (lazy import for easyocr to avoid heavy dependencies)
         self.easyocr_reader = None
+        self.easyocr_available = False
         if self.enable_ocr:
             try:
+                # Lazy import - only import when needed
+                import easyocr
                 self.easyocr_reader = easyocr.Reader(['en'], gpu=False)
+                self.easyocr_available = True
                 logger.info("EasyOCR initialized successfully")
+            except ImportError as e:
+                logger.warning(f"EasyOCR not available: {e}. Will use pytesseract only.")
             except Exception as e:
                 logger.warning(f"Failed to initialize EasyOCR: {e}. Will use pytesseract only.")
     
