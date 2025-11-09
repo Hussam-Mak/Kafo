@@ -4,7 +4,12 @@ Run this to verify Phase 2 is working correctly.
 """
 
 import sys
+import io
 from pathlib import Path
+
+# Fix Windows encoding issues
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
@@ -24,8 +29,8 @@ def test_document_processor():
     if not pdf_files:
         logger.warning("No PDF files found in data/input/")
         logger.info("Please add a test PDF to data/input/ to test the processor")
-        print("\n✅ Document Processor module created successfully!")
-        print("📝 To test: Add a PDF file to data/input/ and run this script again")
+        print("\n[SUCCESS] Document Processor module created successfully!")
+        print("[INFO] To test: Add a PDF file to data/input/ and run this script again")
         return
     
     # Process first PDF found
@@ -40,7 +45,7 @@ def test_document_processor():
         summary = processor.get_page_summary(processed_doc)
         
         print("\n" + "="*60)
-        print("📄 Document Processing Test Results")
+        print("[DOCUMENT] Document Processing Test Results")
         print("="*60)
         print(f"Filename: {summary['filename']}")
         print(f"Pages: {summary['page_count']}")
@@ -56,16 +61,16 @@ def test_document_processor():
             first_page = processed_doc.pages[0]
             if first_page.text:
                 preview = first_page.text[:200]
-                print(f"\n📝 First Page Text Preview (first 200 chars):")
+                print(f"\n[TEXT] First Page Text Preview (first 200 chars):")
                 print("-" * 60)
                 print(preview + ("..." if len(first_page.text) > 200 else ""))
                 print("-" * 60)
         
-        print("\n✅ Document Processor test completed successfully!")
+        print("\n[SUCCESS] Document Processor test completed successfully!")
         
     except Exception as e:
         logger.error(f"Error processing document: {e}")
-        print(f"\n❌ Error: {e}")
+        print(f"\n[ERROR] Error: {e}")
         print("\nNote: Make sure all dependencies are installed:")
         print("  pip install -r requirements.txt")
         print("\nFor image extraction, you may also need poppler-utils:")
