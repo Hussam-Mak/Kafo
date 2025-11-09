@@ -30,14 +30,21 @@ Text Content from Page {page_num}:
 
 {image_context}
 
-Please provide:
-1. Classification category/categories
-2. Confidence scores for each category
-3. Page-level citations with evidence
-4. Reasoning explanation
-5. Any detected PII or sensitive information
+Please provide your response in the following JSON format:
+{{
+  "categories": ["Public", "Confidential", "Highly Sensitive", "Unsafe"],
+  "confidence_scores": {{
+    "Public": 0.0,
+    "Confidential": 0.0,
+    "Highly Sensitive": 0.0,
+    "Unsafe": 0.0
+  }},
+  "reasoning": "Explanation of why this classification was chosen",
+  "citations": [1, 2, 3],
+  "pii_detected": []
+}}
 
-Format your response as structured JSON."""
+Only include categories that apply. Confidence scores should be between 0.0 and 1.0."""
 
 MULTI_PAGE_PROMPT = """Analyze this multi-page document. I will provide content from each page sequentially.
 
