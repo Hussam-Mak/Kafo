@@ -243,7 +243,8 @@ class OutputFormatter:
     def save_json_output(
         self,
         output: Dict[str, Any],
-        filename: Optional[str] = None
+        filename: Optional[str] = None,
+        output_dir: Optional[Path] = None
     ) -> Path:
         """
         Save classification output to JSON file.
@@ -251,6 +252,7 @@ class OutputFormatter:
         Args:
             output: Formatted output dictionary
             filename: Optional filename (defaults to document filename + timestamp)
+            output_dir: Optional output directory (defaults to configured output dir)
             
         Returns:
             Path to saved JSON file
@@ -261,7 +263,11 @@ class OutputFormatter:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"{base_name}_classification_{timestamp}.json"
         
-        output_path = self.output_dir / filename
+        # Use provided output_dir or default
+        save_dir = Path(output_dir) if output_dir else self.output_dir
+        save_dir.mkdir(parents=True, exist_ok=True)
+        
+        output_path = save_dir / filename
         
         # Save with pretty formatting
         with open(output_path, 'w', encoding='utf-8') as f:
